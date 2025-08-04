@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from theme_manager import init_theme
+from logger import log
 
 class App(ctk.CTk):
     def __init__(self):
@@ -16,6 +17,7 @@ class App(ctk.CTk):
 def main():
     init_theme()
 
+    log.info("Starting app")
     app = App()
     app.mainloop()
 
