@@ -1,6 +1,6 @@
 import customtkinter as ctk
-from theme_manager import init_theme
-from logger import log
+from app.theme_manager import init_theme
+from app.logger import log
 
 class App(ctk.CTk):
     def __init__(self):
