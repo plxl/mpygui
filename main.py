@@ -4,6 +4,7 @@ from app.logger import log
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from utils import parse_tkdnd_files
 from pathlib import Path
+from splitter import Splitter
 
 PD = 10 # global padding
 CR = 20 # global corner radius
@@ -25,15 +26,22 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
 
     def create_layout(self):
         self.grid_columnconfigure(0, weight=0) # list files
-        self.grid_columnconfigure(1, weight=1) # controls
+        self.grid_columnconfigure(1, weight=0) # splitter
+        self.grid_columnconfigure(2, weight=1) # controls
         self.grid_rowconfigure(0, weight=1) # list and controls
         self.grid_rowconfigure(1, weight=0) # command + output
-        
+
         self.create_sidebar()
 
     def create_sidebar(self):
-        self.sidebar = ctk.CTkFrame(self, corner_radius=CR)
-        self.sidebar.grid(row=0, rowspan=1, column=0, padx=PD, pady=PD, sticky="ns")
+        self.sidebar = ctk.CTkFrame(self, width=200, corner_radius=CR)
+        self.sidebar.grid(row=0, column=0, padx=(PD, PD/2), pady=PD, sticky="nesw")
+        self.sidebar.grid_propagate(False) # stops random shrinking when first item is added
+        self.sidebar.grid_columnconfigure(0, weight=1)
+        
+        # add splitter for resizing
+        self.sidebar_splitter = Splitter(self, self.sidebar)
+        self.sidebar_splitter.grid(row=0, column=1, sticky="ns")
         
         self.sidebar.drop_target_register(DND_FILES)
         self.sidebar.dnd_bind("<<Drop>>", self.sidebar_on_drop)
