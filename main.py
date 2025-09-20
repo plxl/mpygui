@@ -2,7 +2,7 @@ import customtkinter as ctk
 from app.theme_manager import init_theme
 from app.logger import log
 from tkinterdnd2 import DND_FILES, TkinterDnD
-import shlex
+from utils import parse_tkdnd_files
 from pathlib import Path
 
 PD = 10 # global padding
@@ -41,7 +41,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self.file_buttons = []
 
     def sidebar_on_drop(self, event):
-        files = shlex.split(event.data)
+        files = [f[0] or f[1] for f in parse_tkdnd_files(event.data)]
         
         for i, file in enumerate(files):
             row_index = len(self.files) + i
