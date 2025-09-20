@@ -51,7 +51,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
             self.file_buttons.append(button)
         
         # append only after adding buttons for correct row indicies
-        self.files.append(files)
+        self.files.extend(files)
         
 
 
