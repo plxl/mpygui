@@ -2,9 +2,9 @@ import customtkinter as ctk
 from app.theme_manager import init_theme
 from app.logger import log
 from tkinterdnd2 import DND_FILES, TkinterDnD
-from utils import parse_tkdnd_files
+from app.utils import parse_tkdnd_files
 from pathlib import Path
-from splitter import Splitter
+from app.splitter import Splitter
 
 PD = 10 # global padding
 CR = 20 # global corner radius
