@@ -5,6 +5,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 from app.utils import parse_tkdnd_files
 from pathlib import Path
 from app.splitter import Splitter
+from CTkListbox import *
 
 PD = 10 # global padding
 CR = 20 # global corner radius
@@ -34,19 +35,26 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self.create_sidebar()
 
     def create_sidebar(self):
-        self.sidebar = ctk.CTkFrame(self, width=200, corner_radius=CR)
+        self.sidebar = CTkListbox(
+            self,
+            width=200,
+            corner_radius=CR,
+            border_width=0,
+            fg_color=ctk.ThemeManager.theme["CTkFrame"]["fg_color"],
+            multiple_selection=True,
+            command=self.sidebar_on_select
+        )
         self.sidebar.grid(row=0, column=0, padx=(PD, PD/2), pady=PD, sticky="nesw")
-        self.sidebar.grid_propagate(False) # stops random shrinking when first item is added
         self.sidebar.grid_columnconfigure(0, weight=1)
         
         # add splitter for resizing
         self.sidebar_splitter = Splitter(self, self.sidebar)
         self.sidebar_splitter.grid(row=0, column=1, sticky="ns")
         
-        self.sidebar.drop_target_register(DND_FILES)
-        self.sidebar.dnd_bind("<<Drop>>", self.sidebar_on_drop)
+        # parent frame is required when using either ScrollableFrame or CTkListbox
+        self.sidebar._parent_frame.drop_target_register(DND_FILES)
+        self.sidebar._parent_frame.dnd_bind("<<Drop>>", self.sidebar_on_drop)
         self.files = []
-        self.file_buttons = []
 
     def sidebar_on_drop(self, event):
         files = [f[0] or f[1] for f in parse_tkdnd_files(event.data)]
@@ -54,12 +62,14 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         for i, file in enumerate(files):
             row_index = len(self.files) + i
             filename = Path(file).name
-            button = ctk.CTkButton(self.sidebar, text=filename, anchor="w", corner_radius=10)
-            button.grid(row=row_index, column=0, padx=PD, pady=(PD, 0), sticky="new")
-            self.file_buttons.append(button)
+            self.sidebar.insert("END", filename)
         
         # append only after adding buttons for correct row indicies
         self.files.extend(files)
+        
+    def sidebar_on_select(self, value):
+        indicies = self.sidebar.curselection()
+        print(indicies)
         
 
 
