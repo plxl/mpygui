@@ -5,7 +5,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 from app.utils import parse_tkdnd_files
 from pathlib import Path
 from app.splitter import Splitter
-from CTkListbox import *
+from app.ctk_custom_listbox import CTkCustomListbox
 
 PD = 10 # global padding
 CR = 20 # global corner radius
@@ -35,7 +35,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self.create_sidebar()
 
     def create_sidebar(self):
-        self.sidebar = CTkListbox(
+        self.sidebar = CTkCustomListbox(
             self,
             width=200,
             corner_radius=CR,
