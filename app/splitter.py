@@ -76,7 +76,8 @@ class Splitter(ctk.CTkFrame):
             self.target.configure(width=new_size)
         else:
             delta = event.y_root - self.start_pos
-            new_size = max(self.minsize, self.start_size + delta)
+            new_size = max(self.minsize, self.start_size - delta)
+            new_size = min(self.master.winfo_height() - self.minremainder, new_size)
             self.target.configure(height=new_size)
         self._resize_job = None
         
