@@ -21,7 +21,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self.create_layout()
 
     def set_center(self):
-        self.width, self.height = 1100, 600
+        self.width, self.height = 600, 600
         x = (self.winfo_screenwidth() - self.width) // 2
         y = (self.winfo_screenheight() - self.height) // 2
         self.geometry(f"{self.width}x{self.height}+{x}+{y}")
@@ -40,7 +40,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
     def create_sidebar(self):
         self.sidebar = CTkCustomListbox(
             self,
-            width=200,
+            width=120,
             corner_radius=CR,
             border_width=0,
             fg_color=ctk.ThemeManager.theme["CTkFrame"]["fg_color"],
@@ -74,7 +74,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         print(indicies)
         
     def create_output(self):
-        self.output = ctk.CTkFrame(self, height=200, corner_radius=CR)
+        self.output = ctk.CTkFrame(self, height=140, corner_radius=CR)
         self.output.grid(row=3, columnspan=3, padx=(PD, PD/2), pady=(PD/2, PD), sticky="nsew")
         
         # add splitter for resizing
