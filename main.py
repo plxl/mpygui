@@ -75,11 +75,11 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         
     def create_output(self):
         self.output = ctk.CTkFrame(self, height=200, corner_radius=CR)
-        self.output.grid(row=3, padx=(PD, PD/2), pady=(PD/2, PD), sticky="nsew")
+        self.output.grid(row=3, columnspan=3, padx=(PD, PD/2), pady=(PD/2, PD), sticky="nsew")
         
         # add splitter for resizing
         self.output_splitter = Splitter(self, self.output, orientation=tk.HORIZONTAL)
-        self.output_splitter.grid(row=1, sticky="ew")
+        self.output_splitter.grid(row=1, columnspan=3, sticky="ew")
         
 
 
