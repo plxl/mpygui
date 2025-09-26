@@ -59,8 +59,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
     def sidebar_on_drop(self, event):
         files = [f[0] or f[1] for f in parse_tkdnd_files(event.data)]
         
-        for i, file in enumerate(files):
-            row_index = len(self.files) + i
+        for file in files:
             filename = Path(file).name
             self.sidebar.insert("END", filename)
         
