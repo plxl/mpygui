@@ -27,6 +27,8 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self.geometry(f"{self.width}x{self.height}+{x}+{y}")
 
     def create_layout(self):
+        log.info("Creating layout")
+
         self.grid_columnconfigure(0, weight=0) # list files
         self.grid_columnconfigure(1, weight=0) # splitter
         self.grid_columnconfigure(2, weight=1) # controls
@@ -38,6 +40,8 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self.create_output()
 
     def create_sidebar(self):
+        log.info("Creating sidebar and splitter")
+
         self.sidebar = CTkCustomListbox(
             self,
             width=120,
@@ -60,7 +64,9 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self.files = []
 
     def sidebar_on_drop(self, event):
+        log.info("[Sidebar] Files dropped")
         files = [f[0] or f[1] for f in parse_tkdnd_files(event.data)]
+        log.info(f"[Sidebar] Collected {len(files)} files")
         
         for file in files:
             filename = Path(file).name
@@ -71,9 +77,11 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         
     def sidebar_on_select(self, value):
         indicies = self.sidebar.curselection()
-        print(indicies)
+        log.info(f"[Sidebar] Selected indicies: {indicies}")
         
     def create_output(self):
+        log.info("Creating command output and splitter")
+
         self.output = ctk.CTkFrame(self, height=140, corner_radius=CR)
         self.output.grid(row=3, columnspan=3, padx=(PD, PD/2), pady=(PD/2, PD), sticky="nsew")
         
