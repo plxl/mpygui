@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import tkinter as tk
 from app.theme_manager import init_theme
 from app.logger import log
 from tkinterdnd2 import DND_FILES, TkinterDnD
@@ -30,9 +31,11 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         self.grid_columnconfigure(1, weight=0) # splitter
         self.grid_columnconfigure(2, weight=1) # controls
         self.grid_rowconfigure(0, weight=1) # list and controls
+        self.grid_rowconfigure(1, weight=0) # splitter
         self.grid_rowconfigure(1, weight=0) # command + output
 
         self.create_sidebar()
+        self.create_output()
 
     def create_sidebar(self):
         self.sidebar = CTkCustomListbox(
@@ -44,7 +47,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
             multiple_selection=True,
             command=self.sidebar_on_select
         )
-        self.sidebar.grid(row=0, column=0, padx=(PD, PD/2), pady=PD, sticky="nesw")
+        self.sidebar.grid(row=0, column=0, padx=(PD, PD/2), pady=(PD, PD/2), sticky="nesw")
         self.sidebar.grid_columnconfigure(0, weight=1)
         
         # add splitter for resizing
@@ -69,6 +72,14 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
     def sidebar_on_select(self, value):
         indicies = self.sidebar.curselection()
         print(indicies)
+        
+    def create_output(self):
+        self.output = ctk.CTkFrame(self, height=200, corner_radius=CR)
+        self.output.grid(row=3, padx=(PD, PD/2), pady=(PD/2, PD), sticky="nsew")
+        
+        # add splitter for resizing
+        self.output_splitter = Splitter(self, self.output, orientation=tk.HORIZONTAL)
+        self.output_splitter.grid(row=1, sticky="ew")
         
 
 
