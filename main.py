@@ -56,7 +56,7 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         
         # add splitter for resizing
         self.sidebar_splitter = Splitter(self, self.sidebar)
-        self.sidebar_splitter.grid(row=0, column=1, sticky="ns")
+        self.sidebar_splitter.grid(row=0, column=1, sticky="ns", pady=(PD, PD/2))
         
         # parent frame is required when using either ScrollableFrame or CTkListbox
         self.sidebar._parent_frame.drop_target_register(DND_FILES)
@@ -83,11 +83,11 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         log.info("Creating command output and splitter")
 
         self.output = ctk.CTkFrame(self, height=140, corner_radius=CR)
-        self.output.grid(row=3, columnspan=3, padx=(PD, PD/2), pady=(PD/2, PD), sticky="nsew")
+        self.output.grid(row=3, columnspan=3, padx=(PD, PD), pady=(PD/2, PD), sticky="nsew")
         
         # add splitter for resizing
         self.output_splitter = Splitter(self, self.output, orientation=tk.HORIZONTAL)
-        self.output_splitter.grid(row=1, columnspan=3, sticky="ew")
+        self.output_splitter.grid(row=1, columnspan=3, sticky="ew", padx=PD)
         
 
 
