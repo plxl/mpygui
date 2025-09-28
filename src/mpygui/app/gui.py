@@ -1,10 +1,10 @@
 import customtkinter as ctk
 import tkinter as tk
-from src.common.logger import log
+from common.logger import log
 from tkinterdnd2 import DND_FILES, TkinterDnD
-from src.common.utils.parse_tkdnd import parse_tkdnd_files
+from common.utils.parse_tkdnd import parse_tkdnd_files
 from pathlib import Path
-from src.common.ctk_extensions.widgets import Splitter, CTkCustomListbox
+from common.ctk_extensions.widgets import Splitter, CTkCustomListbox
 
 PD = 10 # global padding
 CR = 20 # global corner radius
