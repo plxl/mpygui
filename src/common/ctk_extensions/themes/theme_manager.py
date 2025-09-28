@@ -1,9 +1,8 @@
 import customtkinter as ctk
-from pathlib import Path
+from importlib import resources
+import os
 
-BASE_DIR = Path(__file__).resolve().parent
-THEMES_DIR = BASE_DIR / "resources"
-
-def init_theme(themes_dir = THEMES_DIR):
+def init_theme():
+    theme_path = resources.files("common.ctk_extensions.themes.resources").joinpath("lavender.json")
     ctk.set_appearance_mode("system")
-    ctk.set_default_color_theme(themes_dir / "lavender.json")
+    ctk.set_default_color_theme(os.fspath(theme_path))
