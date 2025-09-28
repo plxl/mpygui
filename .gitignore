@@ -1,4 +1,9 @@
-__pycache__
-.venv
+*.DS_Store
+
+__pycache__/
+.venv/
+*.egg-info/
+dist/
+build/
 
 app.log
