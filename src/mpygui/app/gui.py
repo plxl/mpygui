@@ -1,12 +1,10 @@
 import customtkinter as ctk
 import tkinter as tk
-from app.theme_manager import init_theme
-from app.logger import log
+from src.common.logger import log
 from tkinterdnd2 import DND_FILES, TkinterDnD
-from app.utils import parse_tkdnd_files
+from src.common.utils.parse_tkdnd import parse_tkdnd_files
 from pathlib import Path
-from app.splitter import Splitter
-from app.ctk_custom_listbox import CTkCustomListbox
+from src.common.ctk_extensions.widgets import Splitter, CTkCustomListbox
 
 PD = 10 # global padding
 CR = 20 # global corner radius
@@ -88,15 +86,3 @@ class App(ctk.CTk, TkinterDnD.DnDWrapper):
         # add splitter for resizing
         self.output_splitter = Splitter(self, self.output, orientation=tk.HORIZONTAL)
         self.output_splitter.grid(row=1, columnspan=3, sticky="ew", padx=PD)
-        
-
-
-def main():
-    init_theme()
-
-    log.info("Starting app")
-    app = App()
-    app.mainloop()
-
-if __name__ == "__main__":
-    main()
