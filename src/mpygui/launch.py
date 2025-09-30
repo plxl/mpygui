@@ -1,14 +1,14 @@
-from common.ctk_extensions.themes import theme_manager
+# from common.ctk_extensions.themes import theme_manager
 from common.logger import log
-from mpygui.app.gui import App
+from mpygui.app.gui import mPyGUI
 
 def main():
-    log.info("Initialising themes")
-    theme_manager.init_theme()
+    # log.info("Initialising themes")
+    # theme_manager.init_theme()
     
     log.info("Starting app")
-    app = App()
-    app.mainloop()
+    mpygui = mPyGUI()
+    mpygui.run()
 
 if __name__ == "__main__":
     main()

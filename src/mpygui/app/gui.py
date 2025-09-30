@@ -1,88 +1,97 @@
-import customtkinter as ctk
-import tkinter as tk
 from common.logger import log
-from tkinterdnd2 import DND_FILES, TkinterDnD
-from common.utils.parse_tkdnd import parse_tkdnd_files
 from pathlib import Path
-from common.ctk_extensions.widgets import Splitter, CTkCustomListbox
 
-PD = 10 # global padding
-CR = 20 # global corner radius
+from PySide6.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QSplitter,
+    QFrame, QListWidget, QStyleFactory
+)
+from PySide6.QtCore import Qt, QEvent
+from qt_material import QtStyleTools, apply_stylesheet
+import darkdetect
 
-class App(ctk.CTk, TkinterDnD.DnDWrapper):
+
+
+class MainWindow(QMainWindow, QtStyleTools):
     def __init__(self):
         super().__init__()
-        self.TkdndVersion = TkinterDnD._require(self)  
-
-        self.title("mPyGUI: The ffmpeg GUI (Python Edition)")
-        self.set_center()
+        self.setWindowTitle("mPyGUI: The ffmpeg GUI (Python Edition)")
         self.create_layout()
+        self.apply_initial_theme()
 
-    def set_center(self):
-        self.width, self.height = 600, 600
-        x = (self.winfo_screenwidth() - self.width) // 2
-        y = (self.winfo_screenheight() - self.height) // 2
-        self.geometry(f"{self.width}x{self.height}+{x}+{y}")
 
     def create_layout(self):
         log.info("Creating layout")
+        
+        self.central = QWidget()
+        self.setCentralWidget(self.central)
+        self.central_layout = QVBoxLayout(self.central)
+        
+        self.create_top()
+        self.create_bottom()
+        self.central_layout.addWidget(self.vsplitter)
 
-        self.grid_columnconfigure(0, weight=0) # list files
-        self.grid_columnconfigure(1, weight=0) # splitter
-        self.grid_columnconfigure(2, weight=1) # controls
-        self.grid_rowconfigure(0, weight=1) # list and controls
-        self.grid_rowconfigure(1, weight=0) # splitter
-        self.grid_rowconfigure(1, weight=0) # command + output
 
+    def create_top(self):
+        self.hsplitter = QSplitter(Qt.Orientation.Horizontal)
         self.create_sidebar()
-        self.create_output()
+        self.create_content()
+        self.hsplitter.addWidget(self.sidebar)
+        self.hsplitter.addWidget(self.content)
+
 
     def create_sidebar(self):
-        log.info("Creating sidebar and splitter")
+        self.sidebar = QFrame()
+        self.list_files = QListWidget(self.sidebar)
+        self.list_files.setStyleSheet("background: transparent; border: none;")
+        h1 = QHBoxLayout(self.sidebar)
+        h1.addWidget(self.list_files)
 
-        self.sidebar = CTkCustomListbox(
-            self,
-            width=120,
-            corner_radius=CR,
-            border_width=0,
-            fg_color=ctk.ThemeManager.theme["CTkFrame"]["fg_color"],
-            multiple_selection=True,
-            command=self.sidebar_on_select
-        )
-        self.sidebar.grid(row=0, column=0, padx=(PD, PD/2), pady=(PD, PD/2), sticky="nesw")
-        self.sidebar.grid_columnconfigure(0, weight=1)
-        
-        # add splitter for resizing
-        self.sidebar_splitter = Splitter(self, self.sidebar)
-        self.sidebar_splitter.grid(row=0, column=1, sticky="ns", pady=(PD, PD/2))
-        
-        # parent frame is required when using either ScrollableFrame or CTkListbox
-        self.sidebar._parent_frame.drop_target_register(DND_FILES)
-        self.sidebar._parent_frame.dnd_bind("<<Drop>>", self.sidebar_on_drop)
-        self.files = []
 
-    def sidebar_on_drop(self, event):
-        log.info("[Sidebar] Files dropped")
-        files = [f[0] or f[1] for f in parse_tkdnd_files(event.data)]
-        log.info(f"[Sidebar] Collected {len(files)} files")
-        
-        for file in files:
-            filename = Path(file).name
-            self.sidebar.insert("END", filename)
-        
-        # append only after adding buttons for correct row indicies
-        self.files.extend(files)
-        
-    def sidebar_on_select(self, value):
-        indicies = self.sidebar.curselection()
-        log.info(f"[Sidebar] Selected indicies: {indicies}")
-        
-    def create_output(self):
-        log.info("Creating command output and splitter")
+    def create_content(self):
+        self.content = QFrame()
 
-        self.output = ctk.CTkFrame(self, height=140, corner_radius=CR)
-        self.output.grid(row=3, columnspan=3, padx=(PD, PD), pady=(PD/2, PD), sticky="nsew")
+
+    def create_bottom(self):
+        self.vsplitter = QSplitter(Qt.Orientation.Vertical)
+        self.create_cmdout()
+        self.vsplitter.addWidget(self.hsplitter)
+        self.vsplitter.addWidget(self.cmdout)
+
+
+    def create_cmdout(self):
+        self.cmdout = QFrame()
+
+
+
+    def apply_initial_theme(self, style=QStyleFactory.create("Fusion")):
+        theme = darkdetect.theme().lower()
+        if theme == "dark":
+            apply_stylesheet(self, theme="dark_purple.xml", style=style)
+        else:
+            apply_stylesheet(self, theme="light_purple.xml", style=style, invert_secondary=True)
+
+
+    def changeEvent(self, ev):
+        if ev.type() == QEvent.ThemeChange:
+            self.apply_initial_theme()
+        super().changeEvent(ev)
+
+
+
+class mPyGUI():
+    def __init__(self):
+        self.app = QApplication([])
+        self.window = MainWindow()
+        self.set_center()
+
+    def set_center(self):
+        w, h = 600, 600
+        screen = self.app.screens()[0].size()
+        x = (screen.width() - w) // 2
+        y = (screen.height() - h) // 2
+        self.window.setGeometry(x, y, w, h)
+        log.info(f"Set window geometry to center: {[x, y, w, h]}")
         
-        # add splitter for resizing
-        self.output_splitter = Splitter(self, self.output, orientation=tk.HORIZONTAL)
-        self.output_splitter.grid(row=1, columnspan=3, sticky="ew", padx=PD)
+    def run(self):
+        self.window.show()
+        self.app.exec()

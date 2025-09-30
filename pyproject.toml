@@ -9,15 +9,14 @@ description = "The ffmpeg GUI (Python Edition)"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "customtkinter==5.2.2",
-    "tkinterdnd2==0.4.3",
-    "CTkListbox==1.5",
+    "PySide6==6.9.3",
+    "qt-material==2.17",
+    "darkdetect==0.8.0",
 ]
 
 [project.optional-dependencies]
 build = [
-    "py2app==0.28.8; sys_platform == 'darwin'",
-    "pyinstaller; sys_platform != 'darwin'"
+    "pyinstaller==6.16.0"
 ]
 
 [tool.setuptools.package-data]
