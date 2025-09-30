@@ -4,57 +4,57 @@ The (very WIP) ffmpeg GUI (Python Edition). Based on [MPEGUI](https://github.com
 
 In its current state it does not do anything.
 
-Some dependencies may not work on all platforms; such as `tkdnd` not working on NixOS.
+## Requirements
+
+Currently developing with:
+- Python >= 3.13
+- PySide6
+- qt-material
+- darkdetect
+
+For building:
+- pyinstaller (Windows/Linux)
+- py2app (macOS)
 
 ## Running
 
 If you want to run from the latest without building, you can install the necessary dependencies and setup the project as a module.
 
-1. Create and enter a virtual environment at the root of the project
-```
-python -m venv .venv
-source .venv/Scripts/activate
-```
+1. Create and enter a virtual environment at the root of the project.
 
-2. If you want to make edits you can install the module in editable mode
-```
-pip install -e .
-```
-OR if you don't plan to make edits then just:
-```
-pip install .
-```
+2. Install module and dependencies. Optionally, use `-e` to install the module in editable mode so you can make modifications:
+    ```sh
+    pip install [-e] .
+    ```
 
 3. Run the app
-```
-python -m mpygui
-```
+    ```sh
+    python -m mpygui
+    ```
 
-## Build
+## Building
 
-The project is setup to use `pyinstaller` for Windows and Linux, and `py2app` for macOS. All binaries are located in `./dist`
+The project is setup to use `pyinstaller` for Windows and Linux, and `py2app` for macOS. All binaries are located in `./dist`.
 
-1. Create and enter a virtual environment at the root of the project
-```
-python -m venv .venv
-source .venv/Scripts/activate
-```
+Note that without any optimisations, py2app produces ~1.3GB `.app` bundles due to PySide6.
+
+1. Create and enter a virtual environment at the root of the project.
 
 2. Install all dependencies for building
-```
-pip install ".[build]"
-```
+    ```sh
+    pip install ".[build]"
+    ```
 
 ### Windows / Linux
 
 3. Run `pyinstaller` to build
-```
-pyinstaller --onefile --windowed --add-data "src/common/ctk_extensions/themes/resources/*.json:common/ctk_extensions/themes/resources" --name mPyGUI src/mpygui/launch.py
-```
+    ```sh
+    pyinstaller --onefile --windowed -n mPyGUI src/mpygui/launch.py
+    ```
 
 ### macOS
 
 3. Run `setup.py` to build with py2app
-```
-python setup.py py2app
-```
+    ```sh
+    python setup.py py2app
+    ```
