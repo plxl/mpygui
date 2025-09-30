@@ -16,8 +16,18 @@ dependencies = [
 
 [project.optional-dependencies]
 build = [
-    "pyinstaller==6.16.0"
+    "pyinstaller==6.16.0; sys_platform != 'darwin'",
+    "py2app==0.28.8; sys_platform == 'darwin'"
 ]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+# ---------- macOS-specific settings for py2app ----------
+[tool.py2app]
+script-files = ["src/mpygui/__main__.py"]
+
+argv-emulation = true
+# iconfile = "assets/icon.icns"
+# resources = ["assets"]
+plist = { CFBundleName = "mpygui", CFBundleIdentifier = "com.plxl.mpygui", CFBundleVersion = "0.1.0", CFBundleShortVersionString = "0.1.0" }
