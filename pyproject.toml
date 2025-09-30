@@ -19,8 +19,5 @@ build = [
     "pyinstaller==6.16.0"
 ]
 
-[tool.setuptools.package-data]
-"common.ctk_extensions.themes.resources" = ["*.json"]
-
 [tool.setuptools.packages.find]
 where = ["src"]
