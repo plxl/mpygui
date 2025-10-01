@@ -10,7 +10,7 @@ class FileDropList(QListWidget):
         self.setAcceptDrops(True)
         self.setVerticalScrollMode(QAbstractItemView.ScrollMode.ScrollPerPixel)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        
+
 # --------------------------------------------------------------------------------------------------
 # nice modern smooth scrolling
 # --------------------------------------------------------------------------------------------------
@@ -26,21 +26,23 @@ class FileDropList(QListWidget):
                 self.verticalScrollBar().value() - delta
             )
             event.accept()
-        
+
         # mouse wheel
         elif not event.angleDelta().isNull():
             sb = self.verticalScrollBar()
             cur_value = sb.value()
-            
             end_value = cur_value
-            if self._anim.endValue():
-                # allows additive scrolling (goes faster if you move the mousewheel faster)
-                end_value = self._anim.endValue()
-                
+
+            if self._anim.state() == QPropertyAnimation.State.Running:
+                self._anim.stop()
+                if self._anim.endValue():
+                    # allows additive scrolling (goes faster if you move the mousewheel faster)
+                    end_value = self._anim.endValue()
+
             delta = event.angleDelta().y()
             step = -delta * 0.2
             end_value += step
-            
+
             # lock the value between min and maximum so it animates
             # smoothly to top/bottom even when scrolling past
             if end_value > cur_value:
@@ -48,15 +50,12 @@ class FileDropList(QListWidget):
             else:
                 end_value = max(end_value, sb.minimum())
 
-            if self._anim.state() == QPropertyAnimation.State.Running:
-                self._anim.stop()
-
             self._anim.setStartValue(cur_value)
             self._anim.setEndValue(end_value)
             self._anim.start()
-            
+
             event.accept()
-            
+
         else:
             super().wheelEvent(event)
 
