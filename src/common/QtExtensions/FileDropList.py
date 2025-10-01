@@ -40,7 +40,7 @@ class FileDropList(QListWidget):
                     end_value = self._anim.endValue()
 
             delta = event.angleDelta().y()
-            step = -delta * 0.2
+            step = -delta * 0.3
             end_value += step
 
             # lock the value between min and maximum so it animates
