@@ -3,11 +3,13 @@ from pathlib import Path
 
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QSplitter,
-    QFrame, QListWidget, QStyleFactory
+    QFrame, QStyleFactory
 )
 from PySide6.QtCore import Qt, QEvent
 from qt_material import QtStyleTools, apply_stylesheet
 import darkdetect
+
+from common.QtExtensions import FileDropList
 
 
 
@@ -17,6 +19,8 @@ class MainWindow(QMainWindow, QtStyleTools):
         self.setWindowTitle("mPyGUI: The ffmpeg GUI (Python Edition)")
         self.create_layout()
         self.apply_initial_theme()
+        
+        self.files = []
 
 
     def create_layout(self):
@@ -41,10 +45,19 @@ class MainWindow(QMainWindow, QtStyleTools):
 
     def create_sidebar(self):
         self.sidebar = QFrame()
-        self.list_files = QListWidget(self.sidebar)
+        self.list_files = FileDropList(self.sidebar)
+        self.list_files.files_dropped.connect(self.sidebar_on_drop)
         self.list_files.setStyleSheet("background: transparent; border: none;")
         h1 = QHBoxLayout(self.sidebar)
         h1.addWidget(self.list_files)
+        
+    def sidebar_on_drop(self, files):
+        log.info(f"[Sidebar] {len(files)} files dropped")
+        for file in files:
+            filename = Path(file).name
+            self.list_files.addItem(filename)
+
+        self.files.extend(files)
 
 
     def create_content(self):
