@@ -41,6 +41,13 @@ class MainWindow(QMainWindow, QtStyleTools):
         self.create_content()
         self.hsplitter.addWidget(self.sidebar)
         self.hsplitter.addWidget(self.content)
+        # configure splitter fixed sides and sizes
+        self.hsplitter.setStretchFactor(0, 0)
+        self.hsplitter.setStretchFactor(1, 1) # content resizes with window
+        self.hsplitter.setSizes([140, 9999])
+        self.hsplitter.setCollapsible(0, True)
+        self.hsplitter.setCollapsible(1, False)
+        self.hsplitter.setMinimumHeight(80)
 
 
     def create_sidebar(self):
@@ -50,7 +57,8 @@ class MainWindow(QMainWindow, QtStyleTools):
         self.list_files.setStyleSheet("background: transparent; border: none;")
         self.sidebar_layout = QHBoxLayout(self.sidebar)
         self.sidebar_layout.addWidget(self.list_files)
-        
+        self.sidebar.setMinimumWidth(80)
+
     def sidebar_on_drop(self, files):
         log.info(f"[Sidebar] {len(files)} files dropped")
         for file in files:
@@ -62,6 +70,7 @@ class MainWindow(QMainWindow, QtStyleTools):
 
     def create_content(self):
         self.content = QFrame()
+        self.content.setMinimumWidth(80)
 
 
     def create_bottom(self):
@@ -69,10 +78,17 @@ class MainWindow(QMainWindow, QtStyleTools):
         self.create_cmdout()
         self.vsplitter.addWidget(self.hsplitter)
         self.vsplitter.addWidget(self.cmdout)
+        # configure splitter fixed sides and sizes
+        self.vsplitter.setStretchFactor(0, 1)
+        self.vsplitter.setStretchFactor(1, 0)
+        self.vsplitter.setSizes([9999, 120])
+        self.vsplitter.setCollapsible(0, False)
+        self.vsplitter.setCollapsible(1, True)
 
 
     def create_cmdout(self):
         self.cmdout = QFrame()
+        self.cmdout.setMinimumHeight(80)
 
 
 
