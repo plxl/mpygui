@@ -19,31 +19,46 @@ class FileDropList(QListWidget):
         self._anim.setDuration(150)
 
     def wheelEvent(self, event: QWheelEvent):
-        sb = self.verticalScrollBar()
-        cur_value = sb.value()
+        # trackpad / high-res
+        if not event.pixelDelta().isNull():
+            delta = event.pixelDelta().y()
+            self.verticalScrollBar().setValue(
+                self.verticalScrollBar().value() - delta
+            )
+            event.accept()
         
-        end_value = cur_value
-        if self._anim.endValue():
-            # allows additive scrolling (goes faster if you move the mousewheel faster)
-            end_value = self._anim.endValue()
+        # mouse wheel
+        elif not event.angleDelta().isNull():
+            sb = self.verticalScrollBar()
+            cur_value = sb.value()
             
-        delta = event.angleDelta().y()
-        step = -delta * 0.2
-        end_value += step
-        
-        # lock the value between min and maximum so it animates
-        # smoothly to top/bottom even when scrolling past
-        if end_value > cur_value:
-            end_value = min(end_value, sb.maximum())
+            end_value = cur_value
+            if self._anim.endValue():
+                # allows additive scrolling (goes faster if you move the mousewheel faster)
+                end_value = self._anim.endValue()
+                
+            delta = event.angleDelta().y()
+            step = -delta * 0.2
+            end_value += step
+            
+            # lock the value between min and maximum so it animates
+            # smoothly to top/bottom even when scrolling past
+            if end_value > cur_value:
+                end_value = min(end_value, sb.maximum())
+            else:
+                end_value = max(end_value, sb.minimum())
+
+            if self._anim.state() == QPropertyAnimation.State.Running:
+                self._anim.stop()
+
+            self._anim.setStartValue(cur_value)
+            self._anim.setEndValue(end_value)
+            self._anim.start()
+            
+            event.accept()
+            
         else:
-            end_value = max(end_value, sb.minimum())
-
-        if self._anim.state() == QPropertyAnimation.State.Running:
-            self._anim.stop()
-
-        self._anim.setStartValue(cur_value)
-        self._anim.setEndValue(end_value)
-        self._anim.start()
+            super().wheelEvent(event)
 
 # --------------------------------------------------------------------------------------------------
 # drag and drop events
