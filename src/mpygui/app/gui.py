@@ -48,8 +48,8 @@ class MainWindow(QMainWindow, QtStyleTools):
         self.list_files = FileDropList(self.sidebar)
         self.list_files.files_dropped.connect(self.sidebar_on_drop)
         self.list_files.setStyleSheet("background: transparent; border: none;")
-        h1 = QHBoxLayout(self.sidebar)
-        h1.addWidget(self.list_files)
+        self.sidebar_layout = QHBoxLayout(self.sidebar)
+        self.sidebar_layout.addWidget(self.list_files)
         
     def sidebar_on_drop(self, files):
         log.info(f"[Sidebar] {len(files)} files dropped")
