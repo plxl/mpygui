@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QListWidget, QAbstractItemView, QScroller
+from PySide6.QtWidgets import QListWidget, QAbstractItemView
 from PySide6.QtCore import Qt, Signal, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent, QWheelEvent
 
