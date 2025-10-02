@@ -54,6 +54,7 @@ class MainWindow(QMainWindow, QtStyleTools):
         self.sidebar = QFrame()
         self.list_files = FileDropList(self.sidebar)
         self.list_files.files_dropped.connect(self.sidebar_on_drop)
+        self.list_files.selectionModel().selectionChanged.connect(self.sidebar_on_select)
         self.list_files.setStyleSheet("background: transparent; border: none;")
         self.sidebar_layout = QHBoxLayout(self.sidebar)
         self.sidebar_layout.addWidget(self.list_files)
@@ -66,6 +67,10 @@ class MainWindow(QMainWindow, QtStyleTools):
             self.list_files.addItem(filename)
 
         self.files.extend(files)
+        
+    def sidebar_on_select(self, *_):
+        selected = [i.row() for i in self.list_files.selectedIndexes()]
+        log.info(f"[Sidebar] Selected: {selected}")
 
 
     def create_content(self):
