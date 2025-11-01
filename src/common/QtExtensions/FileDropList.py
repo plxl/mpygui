@@ -2,9 +2,10 @@ from PySide6.QtWidgets import QListWidget, QAbstractItemView
 from PySide6.QtCore import Qt, Signal, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent, QWheelEvent
 
+
 class FileDropList(QListWidget):
     files_dropped = Signal(list)
-    
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setAcceptDrops(True)
@@ -12,9 +13,9 @@ class FileDropList(QListWidget):
         self.setVerticalScrollMode(QAbstractItemView.ScrollMode.ScrollPerPixel)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-# --------------------------------------------------------------------------------------------------
-# nice modern smooth scrolling
-# --------------------------------------------------------------------------------------------------
+        # --------------------------------------------------------------------------------------------------
+        # nice modern smooth scrolling
+        # --------------------------------------------------------------------------------------------------
         self._anim = QPropertyAnimation(self.verticalScrollBar(), b"value", self)
         self._anim.setEasingCurve(QEasingCurve.Type.OutQuad)
         self._anim.setDuration(150)
@@ -23,9 +24,7 @@ class FileDropList(QListWidget):
         # trackpad / high-res
         if not event.pixelDelta().isNull():
             delta = event.pixelDelta().y()
-            self.verticalScrollBar().setValue(
-                self.verticalScrollBar().value() - delta
-            )
+            self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta)
             event.accept()
 
         # mouse wheel
@@ -60,9 +59,9 @@ class FileDropList(QListWidget):
         else:
             super().wheelEvent(event)
 
-# --------------------------------------------------------------------------------------------------
-# drag and drop events
-# --------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------
+    # drag and drop events
+    # --------------------------------------------------------------------------------------------------
     def dragEnterEvent(self, event: QDragEnterEvent):
         if event.mimeData().hasUrls():
             event.acceptProposedAction()
@@ -82,7 +81,7 @@ class FileDropList(QListWidget):
                 local_path = url.toLocalFile()
                 if local_path:
                     files.append(local_path)
-                    
+
             if files:
                 self.files_dropped.emit(files)
             event.acceptProposedAction()
