@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QListWidget, QAbstractItemView
+from PySide6.QtWidgets import QListWidget, QAbstractItemView, QFrame
 from PySide6.QtCore import Qt, Signal, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent, QWheelEvent
 
@@ -6,7 +6,7 @@ from PySide6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent, QWheelEve
 class FileDropList(QListWidget):
     files_dropped = Signal(list)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QFrame):
         super().__init__(parent)
         self.setAcceptDrops(True)
         self.setSelectionMode(QListWidget.SelectionMode.ExtendedSelection)
@@ -76,7 +76,7 @@ class FileDropList(QListWidget):
 
     def dropEvent(self, event: QDropEvent):
         if event.mimeData().hasUrls():
-            files = []
+            files: list[str] = []
             for url in event.mimeData().urls():
                 local_path = url.toLocalFile()
                 if local_path:
