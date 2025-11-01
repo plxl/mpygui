@@ -11,7 +11,6 @@ from PySide6.QtWidgets import (
     QFrame,
     QStyleFactory,
     QLabel,
-    QPushButton,
 )
 from PySide6.QtCore import Qt, QEvent
 from qt_material import QtStyleTools, apply_stylesheet
