@@ -8,26 +8,7 @@ version = "0.1.0"
 description = "The ffmpeg GUI (Python Edition)"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = [
-    "PySide6==6.9.3",
-    "qt-material==2.17",
-    "darkdetect==0.8.0",
-]
-
-[project.optional-dependencies]
-build = [
-    "pyinstaller==6.16.0; sys_platform != 'darwin'",
-    "py2app==0.28.8; sys_platform == 'darwin'"
-]
+dependencies = ["PySide6==6.9.3", "qt-material==2.17", "darkdetect==0.8.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-# ---------- macOS-specific settings for py2app ----------
-[tool.py2app]
-script-files = ["src/mpygui/__main__.py"]
-
-argv-emulation = true
-# iconfile = "assets/icon.icns"
-# resources = ["assets"]
-plist = { CFBundleName = "mpygui", CFBundleIdentifier = "com.plxl.mpygui", CFBundleVersion = "0.1.0", CFBundleShortVersionString = "0.1.0" }
