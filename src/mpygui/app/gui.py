@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QFrame,
     QStyleFactory,
     QLabel,
+    QStyle,
 )
 from PySide6.QtCore import Qt, QEvent
 from qt_material import (QtStyleTools, apply_stylesheet)  # pyright: ignore[reportUnknownVariableType, reportMissingTypeStubs]
@@ -26,7 +27,7 @@ class MainWindow(QMainWindow, QtStyleTools):
         self.create_layout()
         self.apply_initial_theme()
 
-        self.files = []
+        self.files: list[str] = []
 
     def create_layout(self):
         log.info("Creating layout")
@@ -63,7 +64,7 @@ class MainWindow(QMainWindow, QtStyleTools):
         self.sidebar_layout.addWidget(self.list_files)
         self.sidebar.setMinimumWidth(80)
 
-    def sidebar_on_drop(self, files):
+    def sidebar_on_drop(self, files: list[str]):
         log.info(f"[Sidebar] {len(files)} files dropped")
         for file in files:
             filename = Path(file).name
@@ -71,9 +72,9 @@ class MainWindow(QMainWindow, QtStyleTools):
 
         self.files.extend(files)
 
-    def sidebar_on_select(self, *_):
+    def sidebar_on_select(self, *_: None):
         selected = self.get_selected_files()
-        log.info(f"[Sidebar] Files Selected: {len(selected)}")
+        log.info(f"[Sidebar] Files Selected [{len(selected)}]: {selected}")
 
         if len(selected) > 0:
             self.content.setVisible(True)
@@ -111,15 +112,16 @@ class MainWindow(QMainWindow, QtStyleTools):
         self.cmdout = QFrame()
         self.cmdout.setMinimumHeight(80)
 
-    def apply_initial_theme(self, style=QStyleFactory.create("Fusion")):
-        theme = darkdetect.theme().lower()
-        if theme == "dark":
+    def apply_initial_theme(self, style: QStyle = QStyleFactory.create("Fusion")):
+        theme = darkdetect.theme()
+        assert isinstance(theme, str)
+        if theme.lower() == "dark":
             apply_stylesheet(self, theme="dark_purple.xml", style=style) # pyright: ignore[reportArgumentType]
         else:
             apply_stylesheet(self, theme="light_purple.xml", style=style, invert_secondary=True) # pyright: ignore[reportArgumentType]
 
-    def changeEvent(self, ev):
-        if ev.type() == QEvent.ThemeChange:
+    def changeEvent(self, ev: QEvent):
+        if ev.type() == QEvent.Type.ThemeChange:
             self.apply_initial_theme()
         super().changeEvent(ev)
 
