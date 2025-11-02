@@ -13,8 +13,8 @@ from PySide6.QtWidgets import (
     QLabel,
 )
 from PySide6.QtCore import Qt, QEvent
-from qt_material import QtStyleTools, apply_stylesheet
-import darkdetect
+from qt_material import (QtStyleTools, apply_stylesheet)  # pyright: ignore[reportUnknownVariableType, reportMissingTypeStubs]
+import darkdetect  # pyright: ignore[reportMissingTypeStubs]
 
 from common.QtExtensions import FileDropList
 
@@ -114,9 +114,9 @@ class MainWindow(QMainWindow, QtStyleTools):
     def apply_initial_theme(self, style=QStyleFactory.create("Fusion")):
         theme = darkdetect.theme().lower()
         if theme == "dark":
-            apply_stylesheet(self, theme="dark_purple.xml", style=style)
+            apply_stylesheet(self, theme="dark_purple.xml", style=style) # pyright: ignore[reportArgumentType]
         else:
-            apply_stylesheet(self, theme="light_purple.xml", style=style, invert_secondary=True)
+            apply_stylesheet(self, theme="light_purple.xml", style=style, invert_secondary=True) # pyright: ignore[reportArgumentType]
 
     def changeEvent(self, ev):
         if ev.type() == QEvent.ThemeChange:
