@@ -1,0 +1,46 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1759386674,
+        "narHash": "sha256-wg1Lz/1FC5Q13R+mM5a2oTV9TA9L/CHHTm3/PiLayfA=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "625ad6366178f03acd79f9e3822606dd7985b657",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "pyproject-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1759290781,
+        "narHash": "sha256-2AR5LullOV7TkUfvW/BxJoTk1Xsssz538LZ+sNmPA0w=",
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "rev": "f6381d442f915899838a9d18a13a72fbe93c2ce9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "pyproject.nix",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "pyproject-nix": "pyproject-nix"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
